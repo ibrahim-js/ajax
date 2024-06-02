@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+</head>
+<body>
+    <button>
+        Afficher Matches
+    </button>
+    <ul>
+
+    </ul>
+
+    <script>
+        const button = document.querySelector("button");
+        const ul = document.querySelector("ul");
+
+        button.addEventListener("click", () => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "https://dummyjson.com/posts");
+
+            xhr.onload = function() {
+                const response = JSON.parse(xhr.responseText);
+
+                const posts = response.posts.map(p => {
+                    return {
+                        id: p.id,
+                        title: p.title
+                    }
+                });
+                
+                ul.innerHTML = posts.map(p => `
+                    <li>
+                        <table>
+                            <tr>
+                                <th>${p.id}</th>
+                                <td>${p.title}</td>
+                            </tr>    
+                        </table>
+                    </li>
+                `).join("");
+            };
+            
+            xhr.onerror = function() {
+                console.log("Error");
+            }
+
+            xhr.send();
+        });
+    </script>
+</body>
+</html>
